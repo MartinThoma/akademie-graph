@@ -118,7 +118,7 @@ $course_names = array("1" => "Kausalität, Exoplaneten und Black Jack: Wie man a
                       "4" => "Bin ich zu komplex? Systemtheoretische Ansätze in Forschung und Praxis der Psychologie",
                       "5" => "Personalized Medicine, Big Data, and the Future of Health Care",
                       "6" => "Regulierung und Überwachung des Internets – Ende der Kommunikationsfreiheiten?",
-                      "7" => "TTIP – Transatlantic Trade and Investment Partnership")
+                      "7" => "TTIP – Transatlantic Trade and Investment Partnership");
 
 echo $twig->render('insert.twig', array('heading' => $heading,
                                         'file'=> "insert",
