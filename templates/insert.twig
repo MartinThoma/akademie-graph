@@ -4,7 +4,8 @@
 {% if me == false %}
 <p>Wähle hier dich selbst aus, um einzutragen, welche anderen Akademie-Teilnehmer du kennst :-)</p>
     {% for courseNr, courseData in data %}
-        <h2>Kurs {{ courseNr }}: {{ course_names[courseNr] }}</h2>
+        <h2>Arbeitsgruppe {{ courseNr }} </h2> 
+        <h4>{{ course_names[courseNr] }} </h4>
         <ul>
         {% for person in courseData %}
             {% if person.knows == 0 %}
