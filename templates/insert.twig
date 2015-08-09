@@ -2,7 +2,7 @@
 {% block header %}{% endblock %}
 {% block content %}
 {% if me == false %}
-<p>Ich bin...</p>
+<p>Wähle hier dich selbst aus, um einzutragen, welche anderen Akademie-Teilnehmer du kennst :-)</p>
     {% for courseNr, courseData in data %}
         <h2>Kurs {{ courseNr }}</h2>
         <ul>
@@ -21,7 +21,7 @@
   <div class="form-group">
     {% for courseNr, courseData in data %}
     <fieldset>
-    <legend>Kurs {{ courseNr }}</legend>
+    <legend>Kurs {{ courseNr }}: {{ courseNr }}</legend>
     {% for person in courseData %}
     {% if me.id != person.id %}
     <div class="checkbox">
