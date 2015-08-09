@@ -7,7 +7,11 @@
         <h2>Kurs {{ courseNr }}</h2>
         <ul>
         {% for person in courseData %}
-            <li><a href="?me={{ person.id }}">{{ person.name }} ({{ person.study}})</a></li>
+            {% if person.knows == 0 %}
+            <li><a href="?me={{ person.id }}" class="text-danger">{{ person.name }} ({{ person.study}})</a>: Kennt {{person.knows}} Leute</li>
+            {% else %}
+            <li><a href="?me={{ person.id }}">{{ person.name }} ({{ person.study}})</a>: Kennt {{person.knows}} Leute</li>
+            {% endif %}
         {% endfor %}
         </ul>
     {% endfor %}

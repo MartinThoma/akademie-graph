@@ -5,16 +5,25 @@ function get_people_data_by_id($filename="../people.csv") {
     $csvFile = file($filename);
     $data = [];
     $people_index = 0;
+    $adjacency = get_adjacency();
+
     foreach ($csvFile as $line) {
         $parsed = str_getcsv($line);
         $courseNr = $parsed[2];
         if(!array_key_exists($people_index, $data)) {
             $data[$people_index] = array();
         }
+        $knows_nr = 0;
+        foreach ($adjacency[$people_index] as $key => $value) {
+            if ($value == 1) {
+                $knows_nr += 1;
+            }
+        }
         $data[$people_index][] = array("name" => $parsed[0],
                                        "study" => trim($parsed[1]),
                                        "course_nr" => $courseNr,
-                                       "id" => $people_index);
+                                       "id" => $people_index,
+                                       "knows" => $knows_nr);
         $people_index += 1;
     }
 
@@ -27,6 +36,9 @@ function get_people_data_by_course($filename="../people.csv") {
     $csvFile = file($filename);
     $data = [];
     $people_index = 0;
+
+    $people_id = get_people_data_by_id();
+
     foreach ($csvFile as $line) {
         $parsed = str_getcsv($line);
         $courseNr = $parsed[2];
@@ -35,7 +47,8 @@ function get_people_data_by_course($filename="../people.csv") {
         }
         $data[$courseNr][] = array("name" => $parsed[0],
                                    "study" => trim($parsed[1]),
-                                   "id" => $people_index);
+                                   "id" => $people_index,
+                                   "knows" => $people_id[$people_index][0]['knows']);
         $people_index += 1;
     }
 
