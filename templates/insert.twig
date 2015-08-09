@@ -19,7 +19,7 @@
 {% else %}
 <form method="POST">
     <input type="hidden" name="me" id="me" value="{{me.id}}" />
-  <div class="form-group">
+    <div class="form-group">
     {% for courseNr, courseData in data %}
     <fieldset>
     <legend>Kurs {{ courseNr }}: {{ course_names[courseNr] }}</legend>

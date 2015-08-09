@@ -87,7 +87,7 @@ if (isset($_GET['me'])) {
     $me_id = intval($_GET['me']);
     $data = get_people_data_by_id();
     $me = $data[$me_id][0];
-    $heading = $me['name']." (".$me['study'].") kennt...";
+    $heading = "Ich (".$me['name'].") kenne die folgenden Akademie-Teilnehmer:";
 } else {
     $me = false;
     $heading = "Wer bist du?";
