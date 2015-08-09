@@ -126,6 +126,6 @@ echo $twig->render('insert.twig', array('heading' => $heading,
                                         'data' => $data,
                                         'adjacency' => $adjacency,
                                         'me' => $me,
-                                        'course_names' => '$course_names
+                                        'course_names' => $course_names
                                        )
                   );
