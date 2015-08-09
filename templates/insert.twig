@@ -21,7 +21,7 @@
   <div class="form-group">
     {% for courseNr, courseData in data %}
     <fieldset>
-    <legend>Kurs {{ courseNr }}: {{ course_list }}</legend>
+    <legend>Kurs {{ courseNr }}</legend>
     {% for person in courseData %}
     {% if me.id != person.id %}
     <div class="checkbox">
