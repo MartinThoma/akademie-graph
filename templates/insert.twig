@@ -1,31 +1,34 @@
 {% extends "base.twig" %}
 {% block header %}{% endblock %}
 {% block content %}
-<form method="POST">
-  <div class="form-group">
-    <label for="me">Ich bin</label>
-    <select class="form-control" name="me" id="me">
+{% if me == false %}
+<p>Ich bin...</p>
     {% for courseNr, courseData in data %}
-        <optgroup label="Kurs {{ courseNr }}">
-            {% for person in courseData %}
-                <option value="{{ person.id }}">{{ person.name }} ({{ person.study}})</option>
-            {% endfor %}
-        </optgroup>
+        <h2>Kurs {{ courseNr }}</h2>
+        <ul>
+        {% for person in courseData %}
+            <li><a href="?me={{ person.id }}">{{ person.name }} ({{ person.study}})</a></li>
+        {% endfor %}
+        </ul>
     {% endfor %}
-    </select>
-  </div>
+{% else %}
+<form method="POST">
+    <input type="hidden" name="me" id="me" value="{{me.id}}" />
   <div class="form-group">
     {% for courseNr, courseData in data %}
     <fieldset>
     <legend>Kurs {{ courseNr }}</legend>
     {% for person in courseData %}
+    {% if me.id != person.id %}
     <div class="checkbox">
-      <label><input type="checkbox" value="{{ person.id }}" name="knows[{{ person.id }}]">{{ person.name }} ({{ person.study}})</label>
+      <label><input type="checkbox" value="{{ person.id }}" name="knows[{{ person.id }}]" {% if adjacency[me.id][person.id] %}checked="checked"{%endif%}>{{ person.name }} ({{ person.study}})</label>
     </div>
+    {% endif %}
     {% endfor %}
     </fieldset>
     {% endfor %}
   </div>
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
+{% endif %}
 {% endblock %}
