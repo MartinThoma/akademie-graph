@@ -77,3 +77,4 @@ Makefile
 composer.lock
 vendor
 cache
+data/

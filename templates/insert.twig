@@ -1,26 +1,30 @@
 {% extends "base.twig" %}
 {% block header %}{% endblock %}
 {% block content %}
-<form>
+<form method="POST">
   <div class="form-group">
-    <label for="exampleInputEmail1">Ich bin</label>
-    <select class="form-control">
-      <option>1</option>
-      <option>2</option>
-      <option>3</option>
-      <option>4</option>
-      <option>5</option>
+    <label for="me">Ich bin</label>
+    <select class="form-control" name="me" id="me">
+    {% for courseNr, courseData in data %}
+        <optgroup label="Kurs {{ courseNr }}">
+            {% for person in courseData %}
+                <option value="{{ person.id }}">{{ person.name }} ({{ person.study}})</option>
+            {% endfor %}
+        </optgroup>
+    {% endfor %}
     </select>
   </div>
   <div class="form-group">
-    <label for="exampleInputEmail1">Ich kenne</label>
-    <select class="form-control">
-      <option>1</option>
-      <option>2</option>
-      <option>3</option>
-      <option>4</option>
-      <option>5</option>
-    </select>
+    {% for courseNr, courseData in data %}
+    <fieldset>
+    <legend>Kurs {{ courseNr }}</legend>
+    {% for person in courseData %}
+    <div class="checkbox">
+      <label><input type="checkbox" value="{{ person.id }}" name="knows[{{ person.id }}]">{{ person.name }} ({{ person.study}})</label>
+    </div>
+    {% endfor %}
+    </fieldset>
+    {% endfor %}
   </div>
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
