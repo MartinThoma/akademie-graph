@@ -1,0 +1,79 @@
+*.py[cod]
+
+# C extensions
+*.so
+
+# Packages
+*.egg
+*.egg-info
+dist
+build
+eggs
+parts
+bin
+var
+sdist
+develop-eggs
+.installed.cfg
+lib
+lib64
+__pycache__
+
+# Installer logs
+pip-log.txt
+
+# Unit test / coverage reports
+.coverage
+.tox
+nosetests.xml
+
+# Translations
+*.mo
+
+# Mr Developer
+.mr.developer.cfg
+.project
+.pydevproject
+
+# Both of these folders have to be writable
+website/formulas/*.svg
+website/raw-data
+
+
+# LaTex
+*.aux
+*.log
+*.toc
+*.out
+*.blg
+*.bbl
+*.glg
+*.glo
+*.ist
+*.gls
+*.xdy
+
+*config.py
+*config.yaml
+*config.yml
+*config.php
+*.bak
+*.sublime-workspace
+
+website/clients/nn-python/experiments/
+private/
+wm_raw_draw_data_*.sql
+detexify-import/done/
+detexify-import/skipped/
+detexify-import/splitted/
+tmp/
+project.yml
+*.html
+testresult_*
+DO.*
+Makefile
+
+# composer
+composer.lock
+vendor
+cache

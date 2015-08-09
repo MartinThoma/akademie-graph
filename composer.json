@@ -1,0 +1,6 @@
+{
+    "require": {
+        "twig/twig": "1.*",
+        "erusev/parsedown": "dev-master"
+    }
+}
