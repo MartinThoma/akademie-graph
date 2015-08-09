@@ -113,6 +113,12 @@ if(isset($_POST['me'])) {
 
 $data = get_people_data_by_course();
 $adjacency = get_adjacency();
+$course_names = array("1" => "Kausalität, Exoplaneten und Black Jack: Wie man aus Daten lernt",
+                      "3" => "Britische Ideengeschichte und deutsche Begriffsgeschichte im Vergleich und in der Anwendung",
+                      "4" => "Bin ich zu komplex? Systemtheoretische Ansätze in Forschung und Praxis der Psychologie",
+                      "5" => "Personalized Medicine, Big Data, and the Future of Health Care",
+                      "6" => "Regulierung und Überwachung des Internets – Ende der Kommunikationsfreiheiten?",
+                      "7" => "TTIP – Transatlantic Trade and Investment Partnership")
 
 echo $twig->render('insert.twig', array('heading' => $heading,
                                         'file'=> "insert",
@@ -120,6 +126,6 @@ echo $twig->render('insert.twig', array('heading' => $heading,
                                         'data' => $data,
                                         'adjacency' => $adjacency,
                                         'me' => $me,
-                                        'course_name' => 'Testname'
+                                        'course_names' => '$course_names
                                        )
                   );
