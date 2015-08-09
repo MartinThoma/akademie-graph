@@ -119,6 +119,7 @@ echo $twig->render('insert.twig', array('heading' => $heading,
                                         'msg' => $msg,
                                         'data' => $data,
                                         'adjacency' => $adjacency,
-                                        'me' => $me
+                                        'me' => $me,
+                                        'course_name' => 'Testname'
                                        )
                   );
