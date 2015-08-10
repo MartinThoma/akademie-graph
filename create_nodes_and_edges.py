@@ -72,7 +72,7 @@ def create_adjacency_matrix(n_people):
     """
     adjacency_array = []
     for i in range(n_people):
-        row = np.loadtxt('./data/{}.csv'.format(i), usecols=[1])
+        row = np.loadtxt('./data/{}.csv'.format(i), usecols=[1], delimiter=',')
         adjacency_array.append(row)
     return np.matrix(adjacency_array)
 
