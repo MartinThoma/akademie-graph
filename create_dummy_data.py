@@ -22,4 +22,4 @@ for i in range(n_people):
             number = int(np.random.uniform(0,1) < 0.1)
             if j==i:
                 number = 0
-            f.write('{}, {}\n'.format(j, number))
+            f.write('{},{}\n'.format(j, 0))
