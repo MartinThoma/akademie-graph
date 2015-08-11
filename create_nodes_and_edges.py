@@ -37,6 +37,8 @@ class Node():
         self.knows = 0
         self.known_by = 1
 
+        # Additional properties from the questionaire
+        self.hiking = np.random.randint(0,3)
 
 
 # -----------------------------------------------------------------------------
@@ -44,23 +46,23 @@ class Node():
 # -----------------------------------------------------------------------------
 
 def LightColor(group):
-    colors = {1: '#F4Bf98', 
-              3: '#E89885', 
-              4: '#DBA1BB', 
-              5: '#98B7F4', 
-              6: '#84BBBF', 
-              7: '#8DC9AF'}
+    colors = {1: 'rgb(230, 91, 119)', 
+              3: 'rgb(146, 181, 242)', 
+              4: 'rgb(238, 165, 77)', 
+              5: 'rgb(100, 174, 100)', 
+              6: 'rgb(255, 227, 77)', 
+              7: 'rgb(129, 77, 168)'}
     return colors[group]
 
 
 
 def DarkColor(group):
-    colors = {1: '#D86612',
-              3: '#E23507',
-              4: '#552437',
-              5: '#234587',
-              6: '#08545E',
-              7: '#0A4F34'}
+    colors = {1: 'rgb(220, 20, 60)',
+              3: 'rgb(100, 149, 237)',
+              4: 'rgb(230, 126, 0)',
+              5: 'rgb(34, 139, 34)',
+              6: 'rgb(255, 215, 0)',
+              7: 'rgb(75, 0, 130)'}
     return colors[group]
 
 
@@ -106,9 +108,11 @@ def create_nodes_and_edges(list_of_nodes_, adjacency_matrix_):
         for node in sorted(list_of_nodes_, key=lambda x: x.id):
             f.write('\t{{ id: {id}, label: "{label}", title: "{title}", '
                     'value: {value}, group: {group}, color: {{ border: '
-                    '"{border}", background: "{background}" }}, '
+                    '"{border}", background: "{background}", highlight:'
+                    '{{ border: "{border}", background: "{background}" }} }}, '
                     'original_color: {{ border: "{border}", background: '
-                    '"{background}" }} }},\n'
+                    '"{background}", highlight: {{ border: "{border}", '
+                    'background: "{background}" }} }}, hiking: {hiking} }},\n'
                     .format(id=node.id,
                             label=node.name,
                             title='Name: {}<br>'\
@@ -121,7 +125,8 @@ def create_nodes_and_edges(list_of_nodes_, adjacency_matrix_):
                             value=node.known_by,
                             group=node.group,
                             border=DarkColor(int(node.group)),
-                            background=LightColor(int(node.group))))
+                            background=LightColor(int(node.group)),
+                            hiking=node.hiking))
 
         # Close the Node array properly
         f.write(']; \n\n\n')

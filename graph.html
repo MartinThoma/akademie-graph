@@ -16,8 +16,8 @@
     <!-- Some CSS, should probably be put into separate file -->
     <style type="text/css">
         #graph {
-            width: 800px;
-            height: 800px;
+            width: 1000px;
+            height: 500px;
             border: 1px solid lightgray;
             background: #EFEEED;
         }
@@ -29,8 +29,9 @@
 
 <h2>Wer kennt wen? – Neubeuern 2015 Edition</h2>
 <div style="width:800px; font-size:14px;">
-	Lorem Ipsum sit dolor amet...
-	<br><br>
+	Lorem Ipsum sit dolor amet...<br><br>
+    <button onclick="reset()">Reset Graph</button>
+	<button onclick="hiking()">Show Hikers</button>
 </div>
 
 
@@ -65,12 +66,6 @@ function redrawAll() {
                 size: 12,
                 face: 'Roboto Slab',
                 color: '#444444'
-            },
-            color: {
-                highlight: {
-                    background: 'red',
-                    border: 'red'
-                }
             }
         },
         edges: {
@@ -85,12 +80,12 @@ function redrawAll() {
         physics: {
             enabled: true,
             barnesHut: {
-                gravitationalConstant: -1000,
+                gravitationalConstant: -100,
                 centralGravity: 0.3,
-                springLength: 1000,
+                springLength: 200,
                 springConstant: 0.04,
                 damping: 0.09,
-                avoidOverlap: 0
+                avoidOverlap: 100
             },
             forceAtlas2Based: {
                 gravitationalConstant: -50,
@@ -208,6 +203,32 @@ function GetIncomingNodes(selectedNode, all_edges) {
 }
 
 
+function hiking() {
+    
+    var colors = ['Gray', 'Green', 'Red'];
+    
+    for (node in allNodes) {
+        color = colors[allNodes[node].hiking];
+        allNodes[node].color = color;
+    }
+    
+    var updateArray = [];
+    for (nodeId in allNodes) {
+        if (allNodes.hasOwnProperty(nodeId)) {
+            updateArray.push(allNodes[nodeId]);
+        }
+    }
+    nodesDataset.update(updateArray);
+    
+    var updateArray = [];
+    for (edgeId in allEdges) {
+        if (allEdges.hasOwnProperty(edgeId)) {
+            updateArray.push(allEdges[edgeId]);
+        }
+    }
+    edgesDataset.update(updateArray);
+}
+
 
 function neighbourhoodHighlight(params) {
     // if something is selected:
@@ -289,6 +310,39 @@ function neighbourhoodHighlight(params) {
         }
     }
     edgesDataset.update(updateArray);
+}
+
+function reset() {
+
+    for (node in allNodes) {
+        allNodes[node].color = allNodes[node].original_color;
+        if (allNodes[node].hiddenLabel !== undefined) {
+            allNodes[node].label = allNodes[node].hiddenLabel;
+            allNodes[node].hiddenLabel = undefined;
+        }
+    }
+    for (edge in allEdges) {
+        allEdges[edge].color = allEdges[edge].original_color;
+    }
+    highlightActive = false
+
+    // transform the object into an array
+    var updateArray = [];
+    for (nodeId in allNodes) {
+        if (allNodes.hasOwnProperty(nodeId)) {
+            updateArray.push(allNodes[nodeId]);
+        }
+    }
+    nodesDataset.update(updateArray);
+    
+    var updateArray = [];
+    for (edgeId in allEdges) {
+        if (allEdges.hasOwnProperty(edgeId)) {
+            updateArray.push(allEdges[edgeId]);
+        }
+    }
+    edgesDataset.update(updateArray);
+
 }
 
 redrawAll()

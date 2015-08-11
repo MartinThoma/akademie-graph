@@ -19,7 +19,7 @@ for i in range(n_people):
 
     with open('./data/{}.csv'.format(i), 'w+') as f:
         for j in range(n_people):
-            number = int(np.random.uniform(0,1) < 0.1)
+            number = int(np.random.uniform(0,1) < 0.4)
             if j==i:
                 number = 0
-            f.write('{},{}\n'.format(j, 0))
+            f.write('{},{}\n'.format(j, number))
