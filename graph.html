@@ -174,10 +174,12 @@ function getPropertyMinMax(property) {
 
     var values = [];
     for (node in allNodes) {
-        values.push(allNodes[node][property]);
+        if (!isNaN(allNodes[node][property])) {
+            values.push(allNodes[node][property]);
+        }
     }
 
-    return [Math.min.apply(null, values), Math.max.apply(null, values)];
+    return [Math.min.apply(null, values), Math.max(1, Math.max.apply(null, values))];
 
 }
 
@@ -197,16 +199,20 @@ function highlightProperty(property) {
     var maximum = min_max[1];
 
     for (node in allNodes) {
-        var normedValue = normalize(allNodes[node][property], minimum, maximum);
-        var color = colormap(normedValue);
-        var r = color[0];
-        var g = color[1];
-        var b = color[2];
-        allNodes[node].color = {border: 'Gray', background: 'rgb('+r+', '+g+', '+b+')', highlight: { border: 'Gray', background: 'rgb('+r+', '+g+', '+b+')' }};
+        if (isNaN(allNodes[node][property])){
+            allNodes[node].color = 'LightGray';
+        } else {
+            var normedValue = normalize(allNodes[node][property], minimum, maximum);
+            var color = colormap(normedValue);
+            var r = color[0];
+            var g = color[1];
+            var b = color[2];
+            allNodes[node].color = {border: 'Gray', background: 'rgb('+r+', '+g+', '+b+')', highlight: { border: 'Gray', background: 'rgb('+r+', '+g+', '+b+')' }};
+        }
     }
 
     for (edge in allEdges) {
-        allEdges[edge].color='gray';
+        allEdges[edge].color='LightGray';
     }
 
     updateGraph();

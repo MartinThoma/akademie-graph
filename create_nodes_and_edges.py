@@ -38,19 +38,19 @@ class Node():
         self.known_by = 1
 
         # Additional properties from the questionaire
-        self.age = np.random.randint(20,30)
-        self.academies = np.random.randint(0,4)
-        self.waylength = np.random.randint(1,10)
-        self.hiking = np.random.randint(0,10)
-        self.lake = np.random.randint(0,10)
-        self.choir = np.random.randint(0,10)
-        self.games = np.random.randint(0,10)
-        self.drinks = np.random.randint(0,30)
-        self.sleep = np.random.randint(3,8)
-        self.number = np.random.randint(0,10)
-        self.hotness = np.random.randint(0,11)
-        self.hookups = np.random.randint(0,3)
-        self.description = 'blaah' 
+        self.age = 0
+        self.academies = 0
+        self.waylength = 0
+        self.hiking = 0
+        self.lake = 0
+        self.choir = 0
+        self.games = 0
+        self.drinks = 0
+        self.sleep = 0
+        self.number = 0
+        self.hotness = 0
+        self.hookups = 0
+        self.description = '' 
 
 
 # -----------------------------------------------------------------------------
@@ -118,44 +118,75 @@ def create_nodes_and_edges(list_of_nodes_, adjacency_matrix_):
 
         # And these are the actual data
         for node in sorted(list_of_nodes_, key=lambda x: x.id):
-            f.write('\t{{ id: {id}, label: "{label}", title: "{title}", '
-                    'value: {value}, group: {group}, color: {{ border: '
-                    '"{border}", background: "{background}", highlight:'
-                    '{{ border: "{border}", background: "{background}" }} }}, '
-                    'original_color: {{ border: "{border}", background: '
-                    '"{background}", highlight: {{ border: "{border}", '
-                    'background: "{background}" }} }}, '
-                    'age: {age}, academies: {academies}, '
-                    'waylength: {waylength}, hiking: {hiking}, lake: {lake}, '
-                    'choir: {choir}, games: {games}, drinks: {drinks}, '
-                    'sleep: {sleep}, number: {number}, hotness: {hotness}, '
-                    'hookups: {hookups}, description: "{description}" }},\n'
-                    .format(id=node.id,
-                            label=node.name,
-                            title='Name: {}<br>'\
-                                  'Major: {}<br>'\
-                                  'Group: {}<br>'\
-                                  'Knows: {} people<br>'\
-                                  'Known by: {} people<br>'\
-                                  .format(node.name, node.major, node.group,
-                                          node.knows, node.known_by),
-                            value=node.known_by,
-                            group=node.group,
-                            border=DarkColor(int(node.group)),
-                            background=LightColor(int(node.group)),
-                            age=node.age,
-                            academies=node.academies,
-                            waylength=node.waylength,
-                            hiking=node.hiking,
-                            lake=node.lake,
-                            choir=node.choir,
-                            games=node.games,
-                            drinks=node.drinks,
-                            sleep=node.sleep,
-                            number=node.number,
-                            hotness=node.hotness,
-                            hookups=node.hookups,
-                            description=node.description))
+            f.write('\t{{ id: {id}, '
+                         'label: "{label}", '
+                         'title: "<small style=\'font-family: Roboto Slab;\'>'
+                                 'Name: {label} <br>'
+                                 'Fach: {major} <br>'
+                                 'AG: {group} <br>'
+                                 '---<br>'
+                                 'Kennt {knows} Leute <br>'
+                                 'Wird gekannt von {known_by} Leuten <br>'
+                                 '---<br>'
+                                 'Alter: {age} <br>'
+                                 'Anzahl Sommerakademien: {academies} <br>'
+                                 'Anfahrtsdauer: {waylength} <br>'
+                                 'Wander-Tage: {hiking} <br>'
+                                 'See-Tage: {lake} <br>'
+                                 'Chor-Tage: {choir} <br>'
+                                 'Spieleabende: {games} <br>'
+                                 'Beitrag zur Barkasse: {drinks} <br>'
+                                 'Schlaf pro Nacht: {sleep} <br>'
+                                 'Lieblingszahl: {number} <br>'
+                                 'Eigene Attraktivität: {hotness} <br>'
+                                 'Hookup-Schätzung: {hookups} <br>'
+                                 'Neubeuern in einem Wort: {description}'
+                                 '</small>", '
+                         'value: {value}, '
+                         'group: {group}, '
+                         'color: {{ border: "{border}", '
+                                   'background: "{background}", '
+                                   'highlight: {{ border: "{border}", '
+                                                 'background: "{background}" }} }}, '
+                         'original_color: {{ border: "{border}", '
+                                            'background: "{background}", '
+                                            'highlight: {{ border: "{border}", '
+                                                          'background: "{background}" }} }}, '
+                         'age: {age}, '
+                         'academies: {academies}, '
+                         'waylength: {waylength}, '
+                         'hiking: {hiking}, '
+                         'lake: {lake}, '
+                         'choir: {choir}, '
+                         'games: {games}, '
+                         'drinks: {drinks}, '
+                         'sleep: {sleep}, '
+                         'number: {number}, '
+                         'hotness: {hotness}, '
+                         'hookups: {hookups}, '
+                         'description: "{description}" }},\n'
+                        .format(id=node.id,
+                                label=node.name,
+                                major=node.major,
+                                group=node.group,
+                                knows=node.knows,
+                                known_by=node.known_by,
+                                value=node.known_by,
+                                border=DarkColor(int(node.group)),
+                                background=LightColor(int(node.group)),
+                                age=node.age,
+                                academies=node.academies,
+                                waylength=node.waylength,
+                                hiking=node.hiking,
+                                lake=node.lake,
+                                choir=node.choir,
+                                games=node.games,
+                                drinks=node.drinks,
+                                sleep=node.sleep,
+                                number=node.number,
+                                hotness=node.hotness,
+                                hookups=node.hookups,
+                                description=node.description))
 
         # Close the Node array properly
         f.write(']; \n\n\n')
