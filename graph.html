@@ -15,11 +15,25 @@
 
     <!-- Some CSS, should probably be put into separate file -->
     <style type="text/css">
+        body {
+            font-family: Roboto Slab;
+        }
         #graph {
-            width: 1000px;
+            width: 800px;
             height: 500px;
             border: 1px solid lightgray;
             background: #EFEEED;
+            float: left;
+            margin-right: 20px;
+        }
+        button {
+            width: 175px;
+            background: #C0C0C0;
+            border: 0px;
+            text-align: center;
+            margin-bottom: 10px;
+            padding: 5px;
+            font-family: Roboto Slab;
         }
     </style>
 </head>
@@ -27,15 +41,26 @@
 
 <body>
 
-<h2>Wer kennt wen? – Neubeuern 2015 Edition</h2>
-<div style="width:800px; font-size:14px;">
-	Lorem Ipsum sit dolor amet...<br><br>
-    <button onclick="reset()">Reset Graph</button>
-	<button onclick="hiking()">Show Hikers</button>
+<div style="width: 1000px; margin: auto;">
+    <h2>Wer kennt wen? – Neubeuern 2015 Edition</h2>
+    <div id="graph"></div>
+    <div style='margin-left: 20px;'>
+        <button onclick="highlightProperty('age')">Alter</button><br>
+    	<button onclick="highlightProperty('academies')">Anzahl Sommerakademien</button><br>
+        <button onclick="highlightProperty('waylength')">Anfahrtsdauer</button><br>
+        <button onclick="highlightProperty('hiking')">Wander-Tage</button><br>
+        <button onclick="highlightProperty('lake')">See-Tage</button><br>
+        <button onclick="highlightProperty('choir')">Chor-Tage</button><br>
+        <button onclick="highlightProperty('games')">Spieleabende</button><br>
+        <button onclick="highlightProperty('drinks')">Beitrag zur Barkasse</button><br>
+        <button onclick="highlightProperty('sleep')">Schlaf pro Nacht</button><br>
+        <button onclick="highlightProperty('number')">Lieblingszahl</button><br>
+        <button onclick="highlightProperty('hotness')">Eigene Attraktivität</button><br>
+        <button onclick="highlightProperty('hookups')">Hookup-Schätzung</button><br>
+        <br>
+        <button onclick="reset()">Zurücksetzen</button><br>
+    </div>
 </div>
-
-
-<div id="graph"></div>
 
 <script type="text/javascript">
 var network;
@@ -45,7 +70,7 @@ var highlightActive = false;
 var nodesDataset = new vis.DataSet(nodes);
 var edgesDataset = new vis.DataSet(edges);
 
-//edgesDataset.update({id: 1, color: {color: 'red'}});
+
 
 function redrawAll() {
     var container = document.getElementById('graph');
@@ -81,7 +106,7 @@ function redrawAll() {
             enabled: true,
             barnesHut: {
                 gravitationalConstant: -100,
-                centralGravity: 0.3,
+                centralGravity: 0.5,
                 springLength: 200,
                 springConstant: 0.04,
                 damping: 0.09,
@@ -143,13 +168,54 @@ function redrawAll() {
     network.on("click", neighbourhoodHighlight);
 }
 
-function GetEdgeColor(edgeId) {
-    return allNodes[allEdges[edgeId].from].color;
+
+
+function getPropertyMinMax(property) {
+
+    var values = [];
+    for (node in allNodes) {
+        values.push(allNodes[node][property]);
+    }
+
+    return [Math.min.apply(null, values), Math.max.apply(null, values)];
+
+}
+
+
+
+function normalize(value, minimum, maximum) {
+    var scaling_factor = maximum - minimum;
+    return (value - minimum) / scaling_factor;
+}
+
+
+
+function highlightProperty(property) {
+
+    var min_max = getPropertyMinMax(property);
+    var minimum = min_max[0];
+    var maximum = min_max[1];
+
+    for (node in allNodes) {
+        var normedValue = normalize(allNodes[node][property], minimum, maximum);
+        var color = colormap(normedValue);
+        var r = color[0];
+        var g = color[1];
+        var b = color[2];
+        allNodes[node].color = {border: 'Gray', background: 'rgb('+r+', '+g+', '+b+')', highlight: { border: 'Gray', background: 'rgb('+r+', '+g+', '+b+')' }};
+    }
+
+    for (edge in allEdges) {
+        allEdges[edge].color='gray';
+    }
+
+    updateGraph();
 }
 
 
 
 function GetIncomingEdges(selectedNode, all_edges) {
+
     var connectedNodes = network.getConnectedNodes(selectedNode);
     var incomingEdges = [];
 
@@ -203,15 +269,25 @@ function GetIncomingNodes(selectedNode, all_edges) {
 }
 
 
-function hiking() {
+
+function colormap(x) {
+
+    var r_raw =  0.964649 * Math.pow(x, 0) +  -0.183278 * Math.pow(x, 1) +  -5.436727 * Math.pow(x, 2) +  27.653655 * Math.pow(x, 3) +  -88.568240 * Math.pow(x, 4) +  144.388549 * Math.pow(x, 5) +  -113.084088 * Math.pow(x, 6) +  34.278302 * Math.pow(x, 7); 
+    var g_raw =  0.987456 * Math.pow(x, 0) +  -0.156843 * Math.pow(x, 1) +  -0.380759 * Math.pow(x, 2) +  -2.202245 * Math.pow(x, 3) +  9.734665 * Math.pow(x, 4) +  -19.765903 * Math.pow(x, 5) +  18.512335 * Math.pow(x, 6) +  -6.468158 * Math.pow(x, 7);
+    var b_raw =  0.963022 * Math.pow(x, 0) +  -0.767257 * Math.pow(x, 1) +  2.560923 * Math.pow(x, 2) +  -22.400962 * Math.pow(x, 3) +  59.633418 * Math.pow(x, 4) +  -71.403993 * Math.pow(x, 5) +  39.539013 * Math.pow(x, 6) +  -8.014166 * Math.pow(x, 7);
     
-    var colors = ['Gray', 'Green', 'Red'];
-    
-    for (node in allNodes) {
-        color = colors[allNodes[node].hiking];
-        allNodes[node].color = color;
-    }
-    
+    var r = Math.max(0, Math.round(255 * r_raw));
+    var g = Math.max(0, Math.round(255 * g_raw));
+    var b = Math.max(0, Math.round(255 * b_raw));
+
+    return [r, g, b];
+
+}
+
+
+
+function updateGraph() {
+
     var updateArray = [];
     for (nodeId in allNodes) {
         if (allNodes.hasOwnProperty(nodeId)) {
@@ -227,7 +303,9 @@ function hiking() {
         }
     }
     edgesDataset.update(updateArray);
+
 }
+
 
 
 function neighbourhoodHighlight(params) {
@@ -294,22 +372,7 @@ function neighbourhoodHighlight(params) {
         highlightActive = false
     }
 
-    // transform the object into an array
-    var updateArray = [];
-    for (nodeId in allNodes) {
-        if (allNodes.hasOwnProperty(nodeId)) {
-            updateArray.push(allNodes[nodeId]);
-        }
-    }
-    nodesDataset.update(updateArray);
-    
-    var updateArray = [];
-    for (edgeId in allEdges) {
-        if (allEdges.hasOwnProperty(edgeId)) {
-            updateArray.push(allEdges[edgeId]);
-        }
-    }
-    edgesDataset.update(updateArray);
+    updateGraph();
 }
 
 function reset() {
@@ -326,22 +389,7 @@ function reset() {
     }
     highlightActive = false
 
-    // transform the object into an array
-    var updateArray = [];
-    for (nodeId in allNodes) {
-        if (allNodes.hasOwnProperty(nodeId)) {
-            updateArray.push(allNodes[nodeId]);
-        }
-    }
-    nodesDataset.update(updateArray);
-    
-    var updateArray = [];
-    for (edgeId in allEdges) {
-        if (allEdges.hasOwnProperty(edgeId)) {
-            updateArray.push(allEdges[edgeId]);
-        }
-    }
-    edgesDataset.update(updateArray);
+    updateGraph();
 
 }
 

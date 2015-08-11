@@ -38,7 +38,19 @@ class Node():
         self.known_by = 1
 
         # Additional properties from the questionaire
-        self.hiking = np.random.randint(0,3)
+        self.age = np.random.randint(20,30)
+        self.academies = np.random.randint(0,4)
+        self.waylength = np.random.randint(1,10)
+        self.hiking = np.random.randint(0,10)
+        self.lake = np.random.randint(0,10)
+        self.choir = np.random.randint(0,10)
+        self.games = np.random.randint(0,10)
+        self.drinks = np.random.randint(0,30)
+        self.sleep = np.random.randint(3,8)
+        self.number = np.random.randint(0,10)
+        self.hotness = np.random.randint(0,11)
+        self.hookups = np.random.randint(0,3)
+        self.description = 'blaah' 
 
 
 # -----------------------------------------------------------------------------
@@ -112,7 +124,12 @@ def create_nodes_and_edges(list_of_nodes_, adjacency_matrix_):
                     '{{ border: "{border}", background: "{background}" }} }}, '
                     'original_color: {{ border: "{border}", background: '
                     '"{background}", highlight: {{ border: "{border}", '
-                    'background: "{background}" }} }}, hiking: {hiking} }},\n'
+                    'background: "{background}" }} }}, '
+                    'age: {age}, academies: {academies}, '
+                    'waylength: {waylength}, hiking: {hiking}, lake: {lake}, '
+                    'choir: {choir}, games: {games}, drinks: {drinks}, '
+                    'sleep: {sleep}, number: {number}, hotness: {hotness}, '
+                    'hookups: {hookups}, description: "{description}" }},\n'
                     .format(id=node.id,
                             label=node.name,
                             title='Name: {}<br>'\
@@ -126,7 +143,19 @@ def create_nodes_and_edges(list_of_nodes_, adjacency_matrix_):
                             group=node.group,
                             border=DarkColor(int(node.group)),
                             background=LightColor(int(node.group)),
-                            hiking=node.hiking))
+                            age=node.age,
+                            academies=node.academies,
+                            waylength=node.waylength,
+                            hiking=node.hiking,
+                            lake=node.lake,
+                            choir=node.choir,
+                            games=node.games,
+                            drinks=node.drinks,
+                            sleep=node.sleep,
+                            number=node.number,
+                            hotness=node.hotness,
+                            hookups=node.hookups,
+                            description=node.description))
 
         # Close the Node array properly
         f.write(']; \n\n\n')
