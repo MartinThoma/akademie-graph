@@ -4,8 +4,8 @@
 {% if me == false %}
 <p>Wähle hier dich selbst aus, um einzutragen, welche anderen Akademie-Teilnehmer du kennst :-)</p>
     {% for courseNr, courseData in data %}
-        <h2>Arbeitsgruppe {{ courseNr }} </h2> 
-        <h4>{{ course_names[courseNr] }} </h4>
+        <h2>Arbeitsgruppe {{ courseNr }}</h2>
+        <h4>{{ course_names[courseNr] }}</h4>
         <ul>
         {% for person in courseData %}
             {% if person.knows == 0 %}
@@ -32,6 +32,61 @@
     {% endfor %}
     </fieldset>
     {% endfor %}
+    <fieldset>
+        <legend>Fragen</legend>
+        <div class="form-group">
+          <label for="frage-1">1. Wie alt bist du?</label>
+          <input type="text" class="form-control" id="frage-1" name="frage-1"/>
+        </div>
+        <div class="form-group">
+          <label for="frage-2">2. Deine wievielte Sommerakademie ist diese Akademie?</label>
+          <input type="number" class="form-control" id="frage-2" name="frage-2"/>
+        </div>
+        <div class="form-group">
+          <label for="frage-3">3. Wie lange (in Stunden) war deine Anfahrt nach Neubeuern?</label>
+          <input type="number" class="form-control" id="frage-3" name="frage-3"/>
+        </div>
+        <div class="form-group">
+          <label for="frage-4">4. An wie vielen Tagen warst du wandern?</label>
+          <input type="number" min="-1" class="form-control" id="frage-4" name="frage-4"/>
+        </div>
+        <div class="form-group">
+          <label for="frage-5">5. An wie vielen Tagen warst du am See?</label>
+          <input type="number" min="-1" class="form-control" id="frage-5" name="frage-5"/>
+        </div>
+        <div class="form-group">
+          <label for="frage-6">6. An wie vielen Tagen warst du im Chor?</label>
+          <input type="number" min="-1" class="form-control" id="frage-6" name="frage-6"/>
+        </div>
+        <div class="form-group">
+          <label for="frage-7">7. An wie vielen Tagen warst du auf dem Spieleabend?</label>
+          <input type="number" min="-1" class="form-control" id="frage-7" name="frage-7"/>
+        </div>
+        <div class="form-group">
+          <label for="frage-8">8. Wie viel (in Euro) hast du zur Barkasse/Getränkekasse beigetragen? </label>
+          <input type="number" class="form-control" id="frage-8" name="frage-8"/>
+        </div>
+        <div class="form-group">
+          <label for="frage-9">9. Wie viele Stunden hast du durchschnittlich (pro Nacht) geschlafen?</label>
+          <input type="number" class="form-control" id="frage-9" name="frage-9"/>
+        </div>
+        <div class="form-group">
+          <label for="frage-10">10. Nenne deine Lieblingszahl (zwischen 1 und 10)?</label>
+          <input type="number" min="1" max="10" class="form-control" id="frage-10" name="frage-10"/>
+        </div>
+        <div class="form-group">
+          <label for="frage-11">11. Wie attraktiv findest du dich selbst?</label>
+          <input type="number" class="form-control" id="frage-11" name="frage-11"/>
+        </div>
+        <div class="form-group">
+          <label for="frage-12">12. Was denkst du, wie viele Leute nicht in ihrem Bett aufgewacht sind?</label>
+          <input type="number" class="form-control" id="frage-12" name="frage-12"/>
+        </div>
+        <div class="form-group">
+          <label for="frage-13">13. Wie würdest du die Sommerakademie in einem Wort beschreiben?</label>
+          <input type="text" class="form-control" id="frage-13" name="frage-13"/>
+        </div>
+    </fieldset>
   </div>
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>

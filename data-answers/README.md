@@ -2,4 +2,4 @@ This folder contains text files. The names of the files are:
 
     [Participant-id].csv
 
-and the content: 1 or 0 (participant 1 knows participant 2 or not)
+Each line corresponds to one answer (answer i is in line i)

@@ -109,6 +109,23 @@ if(isset($_POST['me'])) {
         }
     }
     fclose($myfile);
+
+    // Store answers in data-answers/[ME_id].csv
+    $myfile = fopen("../data-answers/$me_id.csv", "w") or die("Unable to open file!");
+    fwrite($myfile, $_POST['frage-1']."\n");
+    fwrite($myfile, $_POST['frage-2']."\n");
+    fwrite($myfile, $_POST['frage-3']."\n");
+    fwrite($myfile, $_POST['frage-4']."\n");
+    fwrite($myfile, $_POST['frage-5']."\n");
+    fwrite($myfile, $_POST['frage-6']."\n");
+    fwrite($myfile, $_POST['frage-7']."\n");
+    fwrite($myfile, $_POST['frage-8']."\n");
+    fwrite($myfile, $_POST['frage-9']."\n");
+    fwrite($myfile, $_POST['frage-10']."\n");
+    fwrite($myfile, $_POST['frage-11']."\n");
+    fwrite($myfile, $_POST['frage-12']."\n");
+    fwrite($myfile, $_POST['frage-13']."\n");
+    fclose($myfile);
 }
 
 $data = get_people_data_by_course();
