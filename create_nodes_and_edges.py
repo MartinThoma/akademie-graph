@@ -38,18 +38,18 @@ class Node():
         self.known_by = 1
 
         # Additional properties from the questionaire
-        self.age = 0
-        self.academies = 0
-        self.waylength = 0
-        self.hiking = 0
-        self.lake = 0
-        self.choir = 0
-        self.games = 0
-        self.drinks = 0
-        self.sleep = 0
-        self.number = 0
-        self.hotness = 0
-        self.hookups = 0
+        self.age       = np.random.randint(1,25)
+        self.academies = np.random.randint(1,25)
+        self.waylength = np.random.randint(1,25)
+        self.hiking    = np.random.randint(1,25)
+        self.lake      = np.random.randint(1,25)
+        self.choir     = np.random.randint(1,25)
+        self.games     = np.random.randint(1,25)
+        self.drinks    = np.random.randint(1,25)
+        self.sleep     = np.random.randint(1,25)
+        self.number    = np.random.randint(1,25)
+        self.hotness   = np.random.randint(1,25)
+        self.hookups   = np.random.randint(1,25)
         self.description = '' 
 
 
@@ -78,6 +78,9 @@ def DarkColor(group):
     return colors[group]
 
 
+def isEven(number):
+    return not number%2==0
+
 
 def create_adjacency_matrix(n_people):
     """
@@ -90,12 +93,42 @@ def create_adjacency_matrix(n_people):
         adjacency_array.append(row)
     return np.matrix(adjacency_array)
 
+def minDistance(pos):
+    distances = []
+    x, y = pos
+    for _ in positions:
+        x_, y_ = _
+        distances.append((x-x_)**2 + (y-y_)**2)
+    if not distances:
+        return 20001
+    else:
+        return np.min(distances)
+
+def xy_from_group(group):
+    
+    def pol2cart(rho, phi):
+        x = rho * np.cos(phi)
+        y = rho * np.sin(phi)
+        return [x, y]
+
+    number = {'1':0, '3':1, '4':2, '5':3, '6':4, '7':5}[group]
+    
+    x_, y_ = pol2cart(1500, np.pi/3*number)
+    x = x_ + np.random.normal(0, 250)
+    y = y_ + np.random.normal(0, 250)
+    while minDistance([x, y]) < 20000:
+        x = x_ + np.random.normal(0, 250)
+        y = y_ + np.random.normal(0, 250)
+    positions.append([x, y])
+    return (x, y)
+
 
 
 def get_node_by_id(list_of_nodes_, id):
     for node in list_of_nodes_:
         if node.id == id:
             return node
+
 
 
 def create_nodes_and_edges(list_of_nodes_, adjacency_matrix_):
@@ -118,7 +151,9 @@ def create_nodes_and_edges(list_of_nodes_, adjacency_matrix_):
 
         # And these are the actual data
         for node in sorted(list_of_nodes_, key=lambda x: x.id):
+            pos = xy_from_group(node.group)
             f.write('\t{{ id: {id}, '
+                         'cid: {id}, '
                          'label: "{label}", '
                          'title: "<small style=\'font-family: Roboto Slab;\'>'
                                  'Name: {label} <br>'
@@ -144,6 +179,8 @@ def create_nodes_and_edges(list_of_nodes_, adjacency_matrix_):
                                  '</small>", '
                          'value: {value}, '
                          'group: {group}, '
+                         'x: {x}, '
+                         'y: {y}, '
                          'color: {{ border: "{border}", '
                                    'background: "{background}", '
                                    'highlight: {{ border: "{border}", '
@@ -169,6 +206,8 @@ def create_nodes_and_edges(list_of_nodes_, adjacency_matrix_):
                                 label=node.name,
                                 major=node.major,
                                 group=node.group,
+                                x=pos[0],
+                                y=pos[1],
                                 knows=node.knows,
                                 known_by=node.known_by,
                                 value=node.known_by,
@@ -238,6 +277,9 @@ def create_nodes_and_edges(list_of_nodes_, adjacency_matrix_):
 # -----------------------------------------------------------------------------
 # MAIN PROGRAM
 # -----------------------------------------------------------------------------
+
+# This is where we keep track of all Node position
+positions = []
 
 # This is where we keep track of all nodes
 list_of_nodes = []

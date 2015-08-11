@@ -81,10 +81,10 @@ function redrawAll() {
                 min: 10,
                 max: 30,
                 label: {
-                    min: 8,
-                    max: 30,
-                    drawThreshold: 12,
-                    maxVisible: 20
+                    min: 10,
+                    max: 24,
+                    drawThreshold: 0,
+                    maxVisible: 24
                 }
             },
             font: {
@@ -103,27 +103,27 @@ function redrawAll() {
             }
         },
         physics: {
-            enabled: true,
+            enabled: false,
             barnesHut: {
                 gravitationalConstant: -100,
-                centralGravity: 0.5,
-                springLength: 200,
+                centralGravity: 1,
+                springLength: 1500,
                 springConstant: 0.04,
-                damping: 0.09,
+                damping: 0.15,
                 avoidOverlap: 100
             },
             forceAtlas2Based: {
-                gravitationalConstant: -50,
-                centralGravity: 0.01,
-                springConstant: 0.08,
-                springLength: 100,
-                damping: 0.4,
-                avoidOverlap: 0
+                gravitationalConstant: -10,
+                centralGravity: 0.001,
+                springConstant: 0.01,
+                springLength: 2000,
+                damping: 6.8,
+                avoidOverlap: 1000
             },
             repulsion: {
                 centralGravity: 0.2,
                 springLength: 200,
-                springConstant: 0.05,
+                springConstant: 0.005,
                 nodeDistance: 100,
                 damping: 0.09
             },
