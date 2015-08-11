@@ -9,7 +9,7 @@ function get_people_data_by_id($filename="../people.csv") {
 
     foreach ($csvFile as $line) {
         $parsed = str_getcsv($line);
-        $courseNr = $parsed[2];
+        $courseNr = intval($parsed[2]);
         if(!array_key_exists($people_index, $data)) {
             $data[$people_index] = array();
         }
@@ -41,7 +41,7 @@ function get_people_data_by_course($filename="../people.csv") {
 
     foreach ($csvFile as $line) {
         $parsed = str_getcsv($line);
-        $courseNr = $parsed[2];
+        $courseNr = intval($parsed[2]);
         if(!array_key_exists($courseNr, $data)) {
             $data[$courseNr] = array();
         }
