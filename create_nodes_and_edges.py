@@ -13,7 +13,7 @@
 # -----------------------------------------------------------------------------
 
 import numpy as np
-
+from itertools import product
 
 
 # -----------------------------------------------------------------------------
@@ -38,19 +38,19 @@ class Node():
         self.known_by = 1
 
         # Additional properties from the questionaire
-        self.age       = np.random.randint(1,25)
-        self.academies = np.random.randint(1,25)
-        self.waylength = np.random.randint(1,25)
-        self.hiking    = np.random.randint(1,25)
-        self.lake      = np.random.randint(1,25)
-        self.choir     = np.random.randint(1,25)
-        self.games     = np.random.randint(1,25)
-        self.drinks    = np.random.randint(1,25)
-        self.sleep     = np.random.randint(1,25)
-        self.number    = np.random.randint(1,25)
-        self.hotness   = np.random.randint(1,25)
-        self.hookups   = np.random.randint(1,25)
-        self.description = '' 
+        self.age          = 0
+        self.academies    = 0
+        self.waylength    = 0
+        self.hiking       = 0
+        self.lake         = 0
+        self.choir        = 0
+        self.games        = 0
+        self.drinks       = 0
+        self.sleep        = 0
+        self.number       = 0
+        self.hotness      = 0
+        self.hookups      = 0
+        self.description = ''
 
 
 # -----------------------------------------------------------------------------
@@ -89,9 +89,80 @@ def create_adjacency_matrix(n_people):
     """
     adjacency_array = []
     for i in range(n_people):
-        row = np.loadtxt('./data/{}.csv'.format(i), usecols=[1], delimiter=',')
+        try:
+            row = np.loadtxt('./data/{}.csv'.format(i), usecols=[1], delimiter=',')
+        except IOError:
+            row = np.array(n_people*[0])
         adjacency_array.append(row)
     return np.matrix(adjacency_array)
+
+
+def apply_warshall_algorithm(w):
+
+    N = len(w)
+    d = [N*[0] for _ in range(N)]
+
+    for i, j in product(range(N), range(N)):
+        if w[i, j] == 0:
+            d[i][j] = np.inf
+        else:
+            d[i][j] = w[i, j]
+
+    d = np.array(d)
+    
+    for k in range(N):
+        for i, j in product(range(N), range(N)):
+            d[i, j] = min(d[i, j], d[i, k] + d[k, j])
+
+    return d
+
+
+def get_bar_sum():
+    """Sums up all contributions to the bar"""
+    barsumme = 0
+    for node in list_of_nodes:
+        if node.drinks == "'?'":
+            continue
+        barsumme += int(node.drinks)
+    print barsumme
+
+
+def scrabble_score(word):
+    """Calculates the scrabble score of a word"""
+    score = {'a': 1, 'b': 3, 'c': 4, 'd': 1, 'e': 1, 'f': 4,
+         'g': 2, 'h': 2, 'i': 1, 'j': 6, 'k': 4, 'l': 2,
+         'm': 3, 'n': 1, 'o': 2, 'p': 4, 'q': 10, 'r': 1,
+         's': 1, 't': 1, 'u': 1, 'v': 6, 'w': 3, 'x': 8,
+         'y': 10, 'z': 3}
+    
+    if len(word) > 15:
+        return 0
+    total = []
+    for letter in word:
+        if letter not in score.keys():
+            continue
+        total.append(score[letter.lower()])
+    return sum(total)
+
+
+def replace_umlauts(string):
+    """Replaces the German umlauts in a string"""
+    result = string.lower()
+    result = result.replace('ß', 'ss')
+    result = result.replace('ä', 'ae')
+    result = result.replace('ö', 'oe')
+    result = result.replace('ü', 'ue')
+    return result
+
+
+def calculate_all_scrabble_scores():
+    """Calculates the scrabble score for all words"""
+    for node in list_of_nodes:
+        word = replace_umlauts(node.description)
+        if word == "'?'":
+            continue
+        print word, scrabble_score(word)
+
 
 def minDistance(pos):
     distances = []
@@ -103,6 +174,7 @@ def minDistance(pos):
         return 20001
     else:
         return np.min(distances)
+
 
 def xy_from_group(group):
     
@@ -130,6 +202,14 @@ def get_node_by_id(list_of_nodes_, id):
             return node
 
 
+def average_known_people():
+    """Prints the average number of people known by one person"""
+    print 'Knows', np.mean([sum(list(np.ravel(adjacency_matrix[i]))) 
+                            for i in range(n_people)])
+    print 'Is known', np.mean([sum(adjacency_matrix[:,i])
+                               for i in range(n_people)])
+
+
 
 def create_nodes_and_edges(list_of_nodes_, adjacency_matrix_):
     """
@@ -137,10 +217,49 @@ def create_nodes_and_edges(list_of_nodes_, adjacency_matrix_):
     the JSON file from them.
     """
 
+    # Random numbers for the labels
+    random_numbers = np.arange(len(list_of_nodes_))
+    np.random.shuffle(random_numbers)
+    print random_numbers
+
     # Update the nodes: Every node gets told how many other nodes know it
     for node in sorted(list_of_nodes_, key=lambda x: x.id):
         node.knows = int(sum(np.ravel(adjacency_matrix[node.id])))
         node.known_by = int(np.ravel(sum(adjacency_matrix[:,node.id])))
+
+    # Update the nodes: Every node gets its questionaire answers
+    for node in sorted(list_of_nodes_, key=lambda x: x.id):
+        try:
+            with open('./data-answers/{}.csv'.format(node.id), 'r') as f:
+                answers = f.readlines()
+                node.age         = answers[0].strip()  if (answers[0].strip()  and answers[0].strip() != '-1') else "'?'"
+                node.academies   = answers[1].strip()  if (answers[1].strip()  and answers[1].strip() != '-1') else "'?'"
+                node.waylength   = answers[2].strip()  if (answers[2].strip()  and answers[2].strip() != '-1') else "'?'"
+                node.hiking      = answers[3].strip()  if (answers[3].strip()  and answers[3].strip() != '-1') else "'?'"
+                node.lake        = answers[4].strip()  if (answers[4].strip()  and answers[4].strip() != '-1') else "'?'"
+                node.choir       = answers[5].strip()  if (answers[5].strip()  and answers[5].strip() != '-1') else "'?'"
+                node.games       = answers[6].strip()  if (answers[6].strip()  and answers[6].strip() != '-1') else "'?'"
+                node.drinks      = answers[7].strip()  if (answers[7].strip()  and answers[7].strip() != '-1') else "'?'"
+                node.sleep       = answers[8].strip()  if (answers[8].strip()  and answers[8].strip() != '-1') else "'?'"
+                node.number      = answers[9].strip()  if (answers[9].strip()  and answers[9].strip() != '-1') else "'?'"
+                node.hotness     = answers[10].strip() if (answers[10].strip() and answers[10].strip()!= '-1') else "'?'"
+                node.hookups     = answers[11].strip() if (answers[11].strip() and answers[11].strip()!= '-1') else "'?'"
+                node.description = answers[12].strip() if (answers[12].strip() and answers[12].strip()!= '-1') else "'?'"
+            
+        except IOError:
+            node.age         = "'?'"
+            node.academies   = "'?'"
+            node.waylength   = "'?'"
+            node.hiking      = "'?'"
+            node.lake        = "'?'"
+            node.choir       = "'?'"
+            node.games       = "'?'"
+            node.drinks      = "'?'"
+            node.sleep       = "'?'"
+            node.number      = "'?'"
+            node.hotness     = "'?'"
+            node.hookups     = "'?'"
+            node.description = "?"
 
     with open('nodes-and-edges.js', 'w+') as f:
 
@@ -153,11 +272,10 @@ def create_nodes_and_edges(list_of_nodes_, adjacency_matrix_):
         for node in sorted(list_of_nodes_, key=lambda x: x.id):
             pos = xy_from_group(node.group)
             f.write('\t{{ id: {id}, '
-                         'cid: {id}, '
-                         'label: "{label}", '
+                         'label: "{random_number}", '
                          'title: "<small style=\'font-family: Roboto Slab;\'>'
-                                 'Name: {label} <br>'
-                                 'Fach: {major} <br>'
+#                                 'Name: {label} <br>'
+#                                 'Fach: {major} <br>'
                                  'AG: {group} <br>'
                                  '---<br>'
                                  'Kennt {knows} Leute <br>'
@@ -179,6 +297,8 @@ def create_nodes_and_edges(list_of_nodes_, adjacency_matrix_):
                                  '</small>", '
                          'value: {value}, '
                          'group: {group}, '
+                         'knows: {knows}, '
+                         'known_by: {known_by}, '
                          'x: {x}, '
                          'y: {y}, '
                          'color: {{ border: "{border}", '
@@ -203,6 +323,7 @@ def create_nodes_and_edges(list_of_nodes_, adjacency_matrix_):
                          'hookups: {hookups}, '
                          'description: "{description}" }},\n'
                         .format(id=node.id,
+                                random_number=random_numbers[node.id],
                                 label=node.name,
                                 major=node.major,
                                 group=node.group,
@@ -244,7 +365,7 @@ def create_nodes_and_edges(list_of_nodes_, adjacency_matrix_):
                 if adjacency_matrix_[row, col] and adjacency_matrix_[col, row]:
                     startnode = get_node_by_id(list_of_nodes_, row)
                     color = DarkColor(int(startnode.group))
-                    f.write('\t{{ id: {}, from: {}, to: {}, arrows: "to", '
+                    f.write('\t{{ id: {}, from: {}, to: {}, '
                             'color: "{}", original_color: "{}"}},\n'
                             .format(id, row, col, color, color))
                     id += 1
@@ -299,3 +420,8 @@ adjacency_matrix = create_adjacency_matrix(n_people)
 
 # Create the nodes-and-edges.js
 create_nodes_and_edges(list_of_nodes, adjacency_matrix)
+
+# Apply the Warshall-algorithm to the adjacency matrix
+##np.set_printoptions(threshold='nan')
+##print set(np.ravel(apply_warshall_algorithm(adjacency_matrix)))
+

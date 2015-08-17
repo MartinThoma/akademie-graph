@@ -20,7 +20,7 @@
         }
         #graph {
             width: 800px;
-            height: 500px;
+            height: 600px;
             border: 1px solid lightgray;
             background: #EFEEED;
             float: left;
@@ -57,7 +57,10 @@
         <button onclick="highlightProperty('number')">Lieblingszahl</button><br>
         <button onclick="highlightProperty('hotness')">Eigene Attraktivität</button><br>
         <button onclick="highlightProperty('hookups')">Hookup-Schätzung</button><br>
+        <button onclick="highlightProperty('knows')">Kennt ... Leute</button><br>
+        <button onclick="highlightProperty('known_by')">Wird gekannt von ... Leuten</button><br>
         <br>
+        <button onclick="toggleedges()" id='toggle'>Toggle Edges</button><br>
         <button onclick="reset()">Zurücksetzen</button><br>
     </div>
 </div>
@@ -66,10 +69,10 @@
 var network;
 var allNodes;
 var highlightActive = false;
+var edges_on = true;
 
 var nodesDataset = new vis.DataSet(nodes);
 var edgesDataset = new vis.DataSet(edges);
-
 
 
 function redrawAll() {
@@ -79,7 +82,7 @@ function redrawAll() {
             shape: 'dot',
             scaling: {
                 min: 10,
-                max: 30,
+                max: 50,
                 label: {
                     min: 10,
                     max: 24,
@@ -315,8 +318,10 @@ function updateGraph() {
 
 
 function neighbourhoodHighlight(params) {
+    
     // if something is selected:
     if (params.nodes.length > 0) {
+
         highlightActive = true;
         var i, j;
         var selectedNode = params.nodes[0];
@@ -392,11 +397,36 @@ function reset() {
     }
     for (edge in allEdges) {
         allEdges[edge].color = allEdges[edge].original_color;
+        if (allEdges[edge].last_color) {
+            allEdges[edge].last_color = allEdges[edge].original_color;
+        }
     }
     highlightActive = false
 
     updateGraph();
 
+}
+
+function toggleedges() {
+
+    if (edges_on) {
+        edges_on = false;
+        for (edge in allEdges) {
+            allEdges[edge].last_color = allEdges[edge].color;
+            allEdges[edge].color = 'rgba(0,0,0,0)';
+        }
+        updateGraph();
+    } else {
+        edges_on = true;
+        for (edge in allEdges) {
+            if (allEdges[edge].last_color) {
+                allEdges[edge].color = allEdges[edge].last_color;
+            } else {
+                allEdges[edge].color = allEdges[edge].original_color;
+            }
+        }
+        updateGraph();
+    }
 }
 
 redrawAll()
